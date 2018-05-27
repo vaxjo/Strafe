@@ -67,9 +67,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cache.cs" />
-    <Compile Include="Episode.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Models\Cache.cs" />
+    <Compile Include="Models\Episode.cs" />
+    <Compile Include="Models\Config.cs" />
     <Compile Include="EpisodeSelectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,9 +89,9 @@
     <Compile Include="StrafeForm.Designer.cs">
       <DependentUpon>StrafeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TVMaze.cs" />
-    <Compile Include="JSONResponse.cs" />
-    <Compile Include="TVFile .cs" />
+    <Compile Include="Models\TVMaze.cs" />
+    <Compile Include="Models\JSONResponse.cs" />
+    <Compile Include="Models\TVFile .cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="EpisodeSelectionForm.resx">

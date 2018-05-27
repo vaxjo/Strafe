@@ -7,8 +7,9 @@ using System.Xml.Linq;
 namespace Strafe {
     public class Config {
         public string TVShowRootFilepath;
-        public List<string> DeleteExtensions, RenameExtensions;
         public string FileFormat;
+        public List<string> DeleteExtensions, ProcessExtensions;
+        public TVFile.Actions DefaultAction;
         public bool Logging, ReplaceExistingFiles;
         public List<ShowMapping> ShowMappings;
         public bool CacheEnabled;
@@ -40,8 +41,9 @@ namespace Strafe {
             Logging = xmlConfig.Attribute("logging").Value.ToLower() == "true";
 
             DeleteExtensions = xmlConfig.Element("Actions").Attribute("delete").Value.Split(',').Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
-            RenameExtensions = xmlConfig.Element("Actions").Attribute("rename").Value.Split(',').Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
+            ProcessExtensions = xmlConfig.Element("Actions").Attribute("process").Value.Split(',').Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
             ReplaceExistingFiles = Convert.ToBoolean(xmlConfig.Element("Actions").Attribute("replaceExistingFiles").Value);
+            DefaultAction = (TVFile.Actions) Enum.Parse(typeof(TVFile.Actions), xmlConfig.Element("Actions").Attribute("defaultAction").Value);
 
             Replacement_Asterisk = xmlConfig.Element("Replacements").Attribute("asterisk").Value;
             Replacement_Backslash = xmlConfig.Element("Replacements").Attribute("backslash").Value;
@@ -102,8 +104,9 @@ namespace Strafe {
            ));
 
             config.Add(new XElement("Actions",
-                new XAttribute("rename", string.Join(",", RenameExtensions)),
+                new XAttribute("process", string.Join(",", ProcessExtensions)),
                 new XAttribute("delete", string.Join(",", DeleteExtensions)),
+                new XAttribute("defaultAction", DefaultAction.ToString()),
                 new XAttribute("replaceExistingFiles", ReplaceExistingFiles.ToString())
             ));
 

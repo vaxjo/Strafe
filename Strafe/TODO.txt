@@ -3,4 +3,4 @@
 
 local readme or help file
 
-Disk Gently (2012) isn't working - don't think TVMaze has the correct episode data
+copy can be slow; show a progbar?

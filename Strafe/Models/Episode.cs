@@ -42,7 +42,7 @@ namespace Strafe {
                 ShowName = tvmazeResult.ShowName;
                 Year = tvmazeResult.Year;
 
-                if (Season > 0 && EpisodeNumber > 0) EpisodeName = TVMaze.GetEpisodeName(TVMazeId, Season, EpisodeNumber);
+                if (Season > 0 || EpisodeNumber > 0) EpisodeName = TVMaze.GetEpisodeName(TVMazeId, Season, EpisodeNumber);
 
             } catch (TVMazeException tvExc) {
                 Error = tvExc.Message;

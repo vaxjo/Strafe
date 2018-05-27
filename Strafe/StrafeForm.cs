@@ -196,7 +196,7 @@ namespace Strafe {
                 // set cache item 
                 Config.SetTVMazeMapping(tvFile.Episode.RawShowName, showForm.SelectedShowId);
                 tvFile.Episode = null;
-                tvFile.Action = TVFile.Actions.Rename;
+                tvFile.Action = Config.DefaultAction;
                 UpdateDataGridRow(row);
             }
             Config.Save();
@@ -229,7 +229,7 @@ namespace Strafe {
                 tvFile.Episode.EpisodeNumber = episodeForm.SelectedEpisodeNumber;
                 tvFile.Episode.EpisodeName = episodeForm.SelectedEpisodeName;
                 previouslySelectedEpisodeName = episodeForm.SelectedEpisodeName;
-                tvFile.Action = TVFile.Actions.Rename;
+                tvFile.Action = Config.DefaultAction;
                 tvFile.ErrorMessage = "";
                 UpdateDataGridRow(row);
             }
@@ -238,7 +238,7 @@ namespace Strafe {
         private void requeryFileToolStripMenuItem_Click(object sender, EventArgs e) {
             foreach (DataGridViewRow row in dataGridView1.SelectedRows) {
                 TVFile tvFile = GetRowTVFile(row);
-                tvFile.Action = TVFile.Actions.Rename;
+                tvFile.Action = Config.DefaultAction;
                 tvFile.ErrorMessage = "";
                 tvFile.Episode = null;
                 UpdateDataGridRow(row);
@@ -256,8 +256,12 @@ namespace Strafe {
             foreach (DataGridViewRow row in dataGridView1.SelectedRows) SetRowAction(row, TVFile.Actions.Delete);
         }
 
-        private void renameToolStripMenuItem1_Click(object sender, EventArgs e) {
-            foreach (DataGridViewRow row in dataGridView1.SelectedRows) SetRowAction(row, TVFile.Actions.Rename);
+        private void moveToolStripMenuItem_Click(object sender, EventArgs e) {
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows) SetRowAction(row, TVFile.Actions.Move);
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e) {
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows) SetRowAction(row, TVFile.Actions.Copy);
         }
 
         private void SetRowAction(DataGridViewRow row, TVFile.Actions action) {
@@ -271,7 +275,7 @@ namespace Strafe {
             foreach (DataGridViewRow row in dataGridView1.SelectedRows) filepaths.Add(GetRowTVFile(row).OriginalFile.Directory.FullName);
             foreach (string filepath in filepaths.Distinct()) System.Diagnostics.Process.Start(filepath);
         }
-        
+
         private void dataGridView1_KeyUp(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Delete) removeFromListToolStripMenuItem_Click(sender, e);
         }
@@ -299,7 +303,8 @@ namespace Strafe {
                             tvFile.OriginalFile.Delete();
                             break;
 
-                        case TVFile.Actions.Rename:
+                        case TVFile.Actions.Move:
+                        case TVFile.Actions.Copy:
                             processedDirectories.Add(tvFile.OriginalFile.Directory);
                             FileInfo newFile = new FileInfo(Path.Combine(Config.TVShowRoot.FullName, tvFile.GetNewFilepath()));
                             if (tvFile.OriginalFile.FullName.ToLower() == newFile.FullName.ToLower()) break; // file is already where it needs to be
@@ -309,8 +314,10 @@ namespace Strafe {
                                 newFile.Delete();
                                 newFile.Refresh(); // if we don't do this, then the subsequent call to .Exists is wrong
                             }
-                            if (!newFile.Exists) tvFile.OriginalFile.MoveTo(newFile.FullName);
-                            else {
+                            if (!newFile.Exists) {
+                                if (tvFile.Action == TVFile.Actions.Move) tvFile.OriginalFile.MoveTo(newFile.FullName);
+                                else if (tvFile.Action == TVFile.Actions.Copy) tvFile.OriginalFile.CopyTo(newFile.FullName);
+                            } else {
                                 anyTrouble = true;
                                 tvFile.Action = TVFile.Actions.Ignore;
                                 tvFile.ErrorMessage = "Destination file exists";

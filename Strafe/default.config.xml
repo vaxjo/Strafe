@@ -5,8 +5,9 @@
   >
 
   <Actions
-    rename="mkv,mp4,avi"
+    process="mkv,mp4,avi"
     delete="db,nfo,txt"
+    defaultAction="Move"
     replaceExistingFiles="True"
    />
 

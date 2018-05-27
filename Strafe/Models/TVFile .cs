@@ -2,7 +2,7 @@
 
 namespace Strafe {
     public class TVFile {
-        public enum Actions { Ignore, Delete, Rename, Error }
+        public enum Actions { Ignore, Delete, Move, Copy, Error }
 
         public FileInfo OriginalFile;
         public Actions Action;
@@ -12,7 +12,7 @@ namespace Strafe {
         public string Extension_Trimmed => OriginalFile.Extension.Trim('.');
 
         /// <summary> Returns true if we need to consult some APIs about this tv show. </summary>
-        public bool NeedsProcessing => (Action == TVFile.Actions.Rename && Episode == null);
+        public bool NeedsProcessing => ((Action == TVFile.Actions.Move || Action == TVFile.Actions.Copy) && Episode == null);
 
         public TVFile(string filepath) : this(new FileInfo(filepath)) { }
 
@@ -33,7 +33,7 @@ namespace Strafe {
 
         public Actions GetDefaultAction() {
             Config config = StrafeForm.Config;
-            if (config.RenameExtensions.Contains(Extension_Trimmed)) return Actions.Rename;
+            if (config.ProcessExtensions.Contains(Extension_Trimmed)) return StrafeForm.Config.DefaultAction; 
             if (config.DeleteExtensions.Contains(Extension_Trimmed)) return Actions.Delete;
             return Actions.Ignore;
         }
