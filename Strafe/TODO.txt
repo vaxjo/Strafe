@@ -2,5 +2,3 @@
 -instead of a default.xml file, put them in the settings resource and override local values with those from the xml
 
 local readme or help file
-
-copy can be slow; show a progbar?

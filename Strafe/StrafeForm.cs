@@ -290,6 +290,9 @@ namespace Strafe {
             Log("Begin action processing");
             List<DirectoryInfo> processedDirectories = new List<DirectoryInfo>();
 
+            int n = progressBar1.Value = 1;
+            progressBar1.Maximum = dataGridView1.Rows.Count;
+            progressBar1.Visible = true;
             foreach (DataGridViewRow row in dataGridView1.Rows) {
                 TVFile tvFile = GetRowTVFile(row);
                 bool anyTrouble = false;
@@ -316,7 +319,7 @@ namespace Strafe {
                             }
                             if (!newFile.Exists) {
                                 if (tvFile.Action == TVFile.Actions.Move) tvFile.OriginalFile.MoveTo(newFile.FullName);
-                                else if (tvFile.Action == TVFile.Actions.Copy) tvFile.OriginalFile.CopyTo(newFile.FullName);
+                                else if (tvFile.Action == TVFile.Actions.Copy) tvFile.OriginalFile.CopyTo(newFile.FullName); // this hangs with large files - maybe implement this some day: https://stackoverflow.com/a/27179497/3140552
                             } else {
                                 anyTrouble = true;
                                 tvFile.Action = TVFile.Actions.Ignore;
@@ -334,8 +337,10 @@ namespace Strafe {
                 }
 
                 if (!anyTrouble) row.Visible = false;
+                progressBar1.Value = ++n;
                 Application.DoEvents();
             }
+            progressBar1.Visible = false;
 
             while (DeleteInvisibleRow())
                 ;
