@@ -7,6 +7,7 @@
   <Actions
     rename="mkv,mp4,avi"
     delete="db,nfo,txt"
+    replaceExistingFiles="True"
    />
 
   <Replacements

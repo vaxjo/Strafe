@@ -9,7 +9,7 @@ namespace Strafe {
         public string TVShowRootFilepath;
         public List<string> DeleteExtensions, RenameExtensions;
         public string FileFormat;
-        public bool Logging;
+        public bool Logging, ReplaceExistingFiles;
         public List<ShowMapping> ShowMappings;
         public bool CacheEnabled;
         public int CacheExpiration;
@@ -41,6 +41,7 @@ namespace Strafe {
 
             DeleteExtensions = xmlConfig.Element("Actions").Attribute("delete").Value.Split(',').Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
             RenameExtensions = xmlConfig.Element("Actions").Attribute("rename").Value.Split(',').Where(o => !string.IsNullOrWhiteSpace(o)).ToList();
+            ReplaceExistingFiles = Convert.ToBoolean(xmlConfig.Element("Actions").Attribute("replaceExistingFiles").Value);
 
             Replacement_Asterisk = xmlConfig.Element("Replacements").Attribute("asterisk").Value;
             Replacement_Backslash = xmlConfig.Element("Replacements").Attribute("backslash").Value;
@@ -103,7 +104,8 @@ namespace Strafe {
 
             config.Add(new XElement("Actions",
                 new XAttribute("rename", string.Join(",", RenameExtensions)),
-                new XAttribute("delete", string.Join(",", DeleteExtensions))
+                new XAttribute("delete", string.Join(",", DeleteExtensions)),
+                new XAttribute("replaceExistingFiles", ReplaceExistingFiles.ToString())
             ));
 
             config.Add(new XElement("Replacements",

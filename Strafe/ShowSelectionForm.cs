@@ -29,7 +29,7 @@ namespace Strafe {
                 foreach (string show in shows) comboBoxShow.Items.Add(new ShowSelectionComboItem(show));
             } catch { }
 
-            if (comboBoxShow.Items.Count == 0) comboBoxShow.Items.Add(new ShowSelectionComboItem("0,(No Matches)"));
+            if (comboBoxShow.Items.Count == 0) comboBoxShow.Items.Add(new ShowSelectionComboItem("0,,(No Matches)"));
             comboBoxShow.SelectedItem = comboBoxShow.Items[0];
         }
 
@@ -48,15 +48,17 @@ namespace Strafe {
 
     public struct ShowSelectionComboItem {
         public int Id;
+        public int? Year;
         public string ShowName;
 
         public ShowSelectionComboItem(string show) {
             Id = Convert.ToInt32(show.Split(',')[0]);
-            ShowName = show.Split(',')[1];
+            Year = string.IsNullOrWhiteSpace(show.Split(',')[1]) ? (int?) null : Convert.ToInt32(show.Split(',')[1]);
+            ShowName = show.Split(',')[2];
         }
 
         public override string ToString() {
-            return ShowName;
+            return ShowName + (Year.HasValue ? " (" + Year.Value + ")" : "");
         }
     }
 }

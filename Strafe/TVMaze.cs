@@ -53,7 +53,7 @@ namespace Strafe {
             }
 
             foreach (var item in episodes.JSON) {
-                if (((int?) item.season ?? 0) == season && ((int?) item.number ?? 0) == episode) return (string)item.name;
+                if (((int?) item.season ?? 0) == season && ((int?) item.number ?? 0) == episode) return (string) item.name;
             }
 
             StrafeForm.Log("Couldn't find episode on TVMaze: http://api.tvmaze.com/shows/" + tvMazeId + "/episodes?specials=1");
@@ -91,8 +91,8 @@ namespace Strafe {
             foreach (var item in episodes.JSON) {
                 string name = item.show.name;
                 int id = item.show.id;
-                string premiered = item.show.premiered;
-                showNames.Add(id + "," + name + (string.IsNullOrWhiteSpace(premiered) ? "" : " (" + premiered.Substring(0, 4) + ")"));
+                string premiered = (string) item.show.premiered;
+                showNames.Add(id + "," + (string.IsNullOrWhiteSpace(premiered) ? "" : premiered.Substring(0, 4)) + "," + name);
             }
             return showNames;
         }

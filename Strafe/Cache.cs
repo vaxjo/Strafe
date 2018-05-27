@@ -73,6 +73,8 @@ namespace Strafe {
         public DateTime LastUsed;
         public JSONResponse JSONResponse;
 
+        public CacheItem() { }
+
         public CacheItem(string url) {
             Url = url;
             LastUsed = DateTime.Now;

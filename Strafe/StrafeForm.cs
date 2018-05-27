@@ -298,8 +298,20 @@ namespace Strafe {
                         case TVFile.Actions.Rename:
                             processedDirectories.Add(tvFile.OriginalFile.Directory);
                             FileInfo newFile = new FileInfo(Path.Combine(Config.TVShowRoot.FullName, tvFile.GetNewFilepath()));
+                            if (tvFile.OriginalFile.FullName == newFile.FullName) break; // file is already where it needs to be
+
                             if (!newFile.Directory.Exists) newFile.Directory.Create();
-                            tvFile.OriginalFile.MoveTo(newFile.FullName);
+                            if (newFile.Exists && Config.ReplaceExistingFiles) {
+                                newFile.Delete();
+                                newFile.Refresh(); // if we don't do this, then the subsequent call to .Exists is wrong
+                            }
+                            if (!newFile.Exists) tvFile.OriginalFile.MoveTo(newFile.FullName);
+                            else {
+                                anyTrouble = true;
+                                tvFile.Action = TVFile.Actions.Ignore;
+                                tvFile.ErrorMessage = "Destination file exists";
+                                UpdateDataGridRow(row);
+                            }
                             break;
                     }
 
@@ -317,10 +329,13 @@ namespace Strafe {
             while (DeleteInvisibleRow())
                 ;
 
+            dataGridView1.AutoResizeColumns();
+
             // clean up empty directories (deepest ones first)
             Log("Cleaning up empty directories");
             foreach (DirectoryInfo di in processedDirectories.Distinct().OrderByDescending(o => o.FullName.Length)) {
                 Log("Checking [" + di.FullName + "]");
+                di.Refresh(); // maybe this will clear up some of these random errors
                 if (di.Exists && di.GetDirectories().Count() + di.GetFiles().Count() == 0) {
                     Log("Deleting [" + di.FullName + "]");
                     di.Delete();
@@ -377,7 +392,7 @@ namespace Strafe {
             About_Box.FormAbout about = new About_Box.FormAbout() { Description = "Strafe helps you organize your TV show video files by querying web services (like TVMaze.com) to determine the canonical show and episode names and moving and renaming your files in a consistent manner." };
             about.ShowDialog();
         }
-   
+
         #endregion
 
         public static void Log(string message) {
@@ -386,7 +401,6 @@ namespace Strafe {
         }
 
         private void StrafeForm_FormClosed(object sender, FormClosedEventArgs e) {
-            Log("Saving cache file");
             Cache.Save();
             Log("Strafe closing normally");
         }

@@ -117,11 +117,11 @@
             // 
             // ShowSelectionForm
             // 
-            this.AcceptButton = this.buttonOK;
+            this.AcceptButton = this.buttonSearch;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(333, 175);
+            this.ClientSize = new System.Drawing.Size(333, 197);
             this.ControlBox = false;
             this.Controls.Add(this.buttonSearch);
             this.Controls.Add(this.comboBoxShow);
