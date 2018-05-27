@@ -1,0 +1,24 @@
+﻿<Strafe
+  tvShowRoot=""
+  fileFormat="{showName}\{showName} - s{ss}e{ee} - {episodeName}"
+  logging="True"
+  >
+
+  <Actions
+    rename="mkv,mp4,avi"
+    delete="db,nfo,txt"
+   />
+
+  <Replacements
+    asterisk=" "
+    backslash="-"
+    colon=" - "
+    doubleQuotes="'"
+    forwardSlash="-"
+    greaterThan=")"
+    lessThan="("
+    pipe="-"
+    questionMark=""
+    />
+
+</Strafe>
