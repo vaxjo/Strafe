@@ -271,6 +271,10 @@ namespace Strafe {
             foreach (DataGridViewRow row in dataGridView1.SelectedRows) filepaths.Add(GetRowTVFile(row).OriginalFile.Directory.FullName);
             foreach (string filepath in filepaths.Distinct()) System.Diagnostics.Process.Start(filepath);
         }
+        
+        private void dataGridView1_KeyUp(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Delete) removeFromListToolStripMenuItem_Click(sender, e);
+        }
 
         private void removeFromListToolStripMenuItem_Click(object sender, EventArgs e) {
             foreach (DataGridViewRow row in dataGridView1.SelectedRows) dataGridView1.Rows.Remove(row);
@@ -298,7 +302,7 @@ namespace Strafe {
                         case TVFile.Actions.Rename:
                             processedDirectories.Add(tvFile.OriginalFile.Directory);
                             FileInfo newFile = new FileInfo(Path.Combine(Config.TVShowRoot.FullName, tvFile.GetNewFilepath()));
-                            if (tvFile.OriginalFile.FullName == newFile.FullName) break; // file is already where it needs to be
+                            if (tvFile.OriginalFile.FullName.ToLower() == newFile.FullName.ToLower()) break; // file is already where it needs to be
 
                             if (!newFile.Directory.Exists) newFile.Directory.Create();
                             if (newFile.Exists && Config.ReplaceExistingFiles) {
@@ -405,5 +409,6 @@ namespace Strafe {
             Cache.Save();
             Log("Strafe closing normally");
         }
+
     }
 }

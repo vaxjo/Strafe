@@ -36,6 +36,7 @@
             this.contextMenuStripFile = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.manuallySelectShowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manuallySelectEpisodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.requeryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.setActionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ignoreToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,13 +52,12 @@
             this.setTVShowRootDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTVShowRootDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.requeryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearShowMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCacheItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStripFile.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -85,6 +85,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(12, 27);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.ShowEditingIcon = false;
@@ -93,6 +94,7 @@
             this.dataGridView1.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellMouseEnter);
             this.dataGridView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
             this.dataGridView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragEnter);
+            this.dataGridView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyUp);
             // 
             // tvfile
             // 
@@ -166,6 +168,13 @@
             this.manuallySelectEpisodeToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.manuallySelectEpisodeToolStripMenuItem.Text = "Manually Select &Episode";
             this.manuallySelectEpisodeToolStripMenuItem.Click += new System.EventHandler(this.manuallySelectEpisodeToolStripMenuItem_Click);
+            // 
+            // requeryFileToolStripMenuItem
+            // 
+            this.requeryFileToolStripMenuItem.Name = "requeryFileToolStripMenuItem";
+            this.requeryFileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.requeryFileToolStripMenuItem.Text = "Re&query File";
+            this.requeryFileToolStripMenuItem.Click += new System.EventHandler(this.requeryFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -280,6 +289,29 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearShowMappingsToolStripMenuItem,
+            this.clearCacheItemsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "&Settings";
+            // 
+            // clearShowMappingsToolStripMenuItem
+            // 
+            this.clearShowMappingsToolStripMenuItem.Name = "clearShowMappingsToolStripMenuItem";
+            this.clearShowMappingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.clearShowMappingsToolStripMenuItem.Text = "Clear Show &Mappings";
+            this.clearShowMappingsToolStripMenuItem.Click += new System.EventHandler(this.clearShowMappingsToolStripMenuItem_Click);
+            // 
+            // clearCacheItemsToolStripMenuItem
+            // 
+            this.clearCacheItemsToolStripMenuItem.Name = "clearCacheItemsToolStripMenuItem";
+            this.clearCacheItemsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.clearCacheItemsToolStripMenuItem.Text = "Clear &Cache Items";
+            this.clearCacheItemsToolStripMenuItem.Click += new System.EventHandler(this.clearCacheItemsToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -304,36 +336,6 @@
             this.progressBar1.Size = new System.Drawing.Size(839, 32);
             this.progressBar1.TabIndex = 3;
             this.progressBar1.Visible = false;
-            // 
-            // requeryFileToolStripMenuItem
-            // 
-            this.requeryFileToolStripMenuItem.Name = "requeryFileToolStripMenuItem";
-            this.requeryFileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.requeryFileToolStripMenuItem.Text = "Re&query File";
-            this.requeryFileToolStripMenuItem.Click += new System.EventHandler(this.requeryFileToolStripMenuItem_Click);
-            // 
-            // settingsToolStripMenuItem
-            // 
-            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.clearShowMappingsToolStripMenuItem,
-            this.clearCacheItemsToolStripMenuItem});
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.settingsToolStripMenuItem.Text = "&Settings";
-            // 
-            // clearShowMappingsToolStripMenuItem
-            // 
-            this.clearShowMappingsToolStripMenuItem.Name = "clearShowMappingsToolStripMenuItem";
-            this.clearShowMappingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.clearShowMappingsToolStripMenuItem.Text = "Clear Show &Mappings";
-            this.clearShowMappingsToolStripMenuItem.Click += new System.EventHandler(this.clearShowMappingsToolStripMenuItem_Click);
-            // 
-            // clearCacheItemsToolStripMenuItem
-            // 
-            this.clearCacheItemsToolStripMenuItem.Name = "clearCacheItemsToolStripMenuItem";
-            this.clearCacheItemsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.clearCacheItemsToolStripMenuItem.Text = "Clear &Cache Items";
-            this.clearCacheItemsToolStripMenuItem.Click += new System.EventHandler(this.clearCacheItemsToolStripMenuItem_Click);
             // 
             // StrafeForm
             // 
