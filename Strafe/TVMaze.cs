@@ -10,11 +10,11 @@ namespace Strafe {
         /// <summary> Query TV Maze and, ideally, return the show's canonical name and id. </summary>
         public static Tuple<int, string> GetShowName(string fileShowName) {
 
-            CachedShow cache = StrafeForm.Config.CachedShows.FirstOrDefault(o => o.FileShowName == fileShowName && o.TVSource == CachedShow.TVSources.TVMaze);
+            ShowMapping cache = StrafeForm.Config.ShowMappings.FirstOrDefault(o => o.FileShowName == fileShowName && o.TVSource == ShowMapping.TVSources.TVMaze);
             if (cache != null) return new Tuple<int, string>(cache.TVMazeId, cache.CanonicalShowName);
 
             var result = GetShowName2(fileShowName);
-            StrafeForm.Config.SetTVMazeCacheItem(fileShowName, result.Item2, result.Item1);
+            StrafeForm.Config.SetTVMazeMapping(fileShowName, result.Item2, result.Item1);
             StrafeForm.Config.Save();
 
             return new Tuple<int, string>(result.Item1, result.Item2);
@@ -25,7 +25,9 @@ namespace Strafe {
             // after each failure, lop off the end of the name and try again
             string slowlyReducingFileName = fileShowName.Trim();
             while (slowlyReducingFileName.Length > 0) {
-                JSONResponse singlesearch = JSONResponse.Get("http://api.tvmaze.com/singlesearch/shows?q=" + slowlyReducingFileName);
+                CacheItem singlesearchCache = StrafeForm.Cache.Get("http://api.tvmaze.com/singlesearch/shows?q=" + slowlyReducingFileName);
+                JSONResponse singlesearch = singlesearchCache.JSONResponse;
+
                 if (singlesearch.HTTPStatus == HttpStatusCode.OK) return new Tuple<int, string>((int) singlesearch.JSON.id, (string) singlesearch.JSON.name);
 
                 if (singlesearch.HTTPStatus != HttpStatusCode.NotFound) {
@@ -42,17 +44,26 @@ namespace Strafe {
         }
 
         public static string GetEpisodeName(int tvMazeId, int season, int episode) {
-            JSONResponse episodebynumber = JSONResponse.Get("http://api.tvmaze.com/shows/" + tvMazeId + "/episodebynumber?season=" + season + "&number=" + episode);
-            if (episodebynumber.HTTPStatus != HttpStatusCode.OK) {
-                StrafeForm.Log("Couldn't find episode on TVMaze: http://api.tvmaze.com/shows/" + tvMazeId + "/episodebynumber?season=" + season + "&number=" + episode);
-                throw new TVMazeException("TVMaze: couldn't find episode");
+            CacheItem episodesCache = StrafeForm.Cache.Get("http://api.tvmaze.com/shows/" + tvMazeId + "/episodes?specials=1");
+            JSONResponse episodes = episodesCache.JSONResponse;
+
+            if (episodes.HTTPStatus != HttpStatusCode.OK) {
+                StrafeForm.Log("Couldn't get episode list on TVMaze: http://api.tvmaze.com/shows/" + tvMazeId + "/episodes?specials=1");
+                throw new TVMazeException("TVMaze: couldn't get episode list");
             }
 
-            return episodebynumber.JSON.name;
+            foreach (var item in episodes.JSON) {
+                if (((int?) item.season ?? 0) == season && ((int?) item.number ?? 0) == episode) return (string)item.name;
+            }
+
+            StrafeForm.Log("Couldn't find episode on TVMaze: http://api.tvmaze.com/shows/" + tvMazeId + "/episodes?specials=1");
+            throw new TVMazeException("TVMaze: couldn't find episode");
         }
 
         public static List<string> GetEpisodeList(int tvMazeId) {
-            JSONResponse episodes = JSONResponse.Get("http://api.tvmaze.com/shows/" + tvMazeId + "/episodes?specials=1");
+            CacheItem episodesCache = StrafeForm.Cache.Get("http://api.tvmaze.com/shows/" + tvMazeId + "/episodes?specials=1");
+            JSONResponse episodes = episodesCache.JSONResponse;
+
             if (episodes.HTTPStatus != HttpStatusCode.OK) {
                 StrafeForm.Log("Couldn't find episode on TVMaze: http://api.tvmaze.com/shows/" + tvMazeId + "/episodes?specials=1");
                 throw new TVMazeException("TVMaze: couldn't get episode list");
@@ -69,7 +80,9 @@ namespace Strafe {
         }
 
         public static List<string> GetShowList(string search) {
-            JSONResponse episodes = JSONResponse.Get("http://api.tvmaze.com/search/shows?q=" + search);
+            CacheItem episodesCache = StrafeForm.Cache.Get("http://api.tvmaze.com/search/shows?q=" + search);
+            JSONResponse episodes = episodesCache.JSONResponse;
+
             if (episodes.HTTPStatus != HttpStatusCode.OK) {
                 throw new TVMazeException("TVMaze: no matches");
             }

@@ -10,7 +10,9 @@ namespace Strafe {
         public List<string> DeleteExtensions, RenameExtensions;
         public string FileFormat;
         public bool Logging;
-        public List<CachedShow> CachedShows;
+        public List<ShowMapping> ShowMappings;
+        public bool CacheEnabled;
+        public int CacheExpiration;
 
         public string Replacement_DoubleQuotes, Replacement_LessThan, Replacement_GreaterThan, Replacement_Pipe, Replacement_Colon, Replacement_Asterisk, Replacement_Backslash, Replacement_QuestionMark, Replacement_ForwardSlash;
 
@@ -27,9 +29,8 @@ namespace Strafe {
             if (!ConfigFile.Exists) {
                 // get default from embedded resource
                 using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Strafe.default.config.xml"))
-                using (StreamReader reader = new StreamReader(stream)) {
+                using (StreamReader reader = new StreamReader(stream))
                     File.WriteAllText(ConfigFile.FullName, reader.ReadToEnd());
-                }
             }
 
             XElement xmlConfig = XElement.Load(ConfigFile.FullName);
@@ -51,20 +52,24 @@ namespace Strafe {
             Replacement_Pipe = xmlConfig.Element("Replacements").Attribute("pipe").Value;
             Replacement_QuestionMark = xmlConfig.Element("Replacements").Attribute("questionMark").Value;
 
-            CachedShows = new List<CachedShow>();
-            foreach (XElement xmlCache in xmlConfig.Elements("Cache")) {
-                CachedShows.Add(new CachedShow() {
-                    TVSource = (CachedShow.TVSources) Enum.Parse(typeof(CachedShow.TVSources), xmlCache.Attribute("source").Value),
+            CacheEnabled = Convert.ToBoolean(xmlConfig.Element("Cache").Attribute("enabled").Value);
+            CacheExpiration = Convert.ToInt32(xmlConfig.Element("Cache").Attribute("expiration").Value);
+
+            ShowMappings = new List<ShowMapping>();
+            foreach (XElement xmlCache in xmlConfig.Elements("ShowMapping")) {
+                ShowMappings.Add(new ShowMapping() {
+                    TVSource = (ShowMapping.TVSources) Enum.Parse(typeof(ShowMapping.TVSources), xmlCache.Attribute("source").Value),
                     FileShowName = xmlCache.Attribute("fileShowName").Value,
                     CanonicalShowName = xmlCache.Attribute("canonicalShowName").Value,
-                    TVMazeId = Convert.ToInt32(xmlCache.Attribute("tvMazeId").Value) });
+                    SourceId = xmlCache.Attribute("sourceId").Value
+                });
             }
         }
 
         /// <summary> Add or update cached show item. (Does not call Save().) </summary>
-        public void SetTVMazeCacheItem(string fileShowName, string canonicalShowName, int tvMazeId) {
-            CachedShows.RemoveAll(o => o.FileShowName == fileShowName);
-            CachedShows.Add(new CachedShow() { CanonicalShowName = canonicalShowName, FileShowName = fileShowName, TVMazeId = tvMazeId, TVSource = CachedShow.TVSources.TVMaze });
+        public void SetTVMazeMapping(string fileShowName, string canonicalShowName, int sourceId) {
+            ShowMappings.RemoveAll(o => o.FileShowName == fileShowName);
+            ShowMappings.Add(new ShowMapping() { CanonicalShowName = canonicalShowName, FileShowName = fileShowName, SourceId = sourceId.ToString(), TVSource = ShowMapping.TVSources.TVMaze });
         }
 
         /// <summary> Remove and replace illegal file name characters. </summary>
@@ -91,6 +96,11 @@ namespace Strafe {
                 new XAttribute("logging", Logging.ToString())
             );
 
+            config.Add(new XElement("Cache",
+               new XAttribute("enabled", CacheEnabled.ToString()),
+               new XAttribute("expiration", CacheExpiration.ToString())
+           ));
+
             config.Add(new XElement("Actions",
                 new XAttribute("rename", string.Join(",", RenameExtensions)),
                 new XAttribute("delete", string.Join(",", DeleteExtensions))
@@ -108,12 +118,12 @@ namespace Strafe {
                 new XAttribute("questionMark", Replacement_QuestionMark)
             ));
 
-            foreach (CachedShow cachedShow in CachedShows) {
-                config.Add(new XElement("Cache",
-                    new XAttribute("source", cachedShow.TVSource),
-                    new XAttribute("fileShowName", cachedShow.FileShowName),
-                    new XAttribute("canonicalShowName", cachedShow.CanonicalShowName),
-                    new XAttribute("tvMazeId", cachedShow.TVMazeId)
+            foreach (ShowMapping mapping in ShowMappings) {
+                config.Add(new XElement("ShowMapping",
+                    new XAttribute("source", mapping.TVSource),
+                    new XAttribute("fileShowName", mapping.FileShowName),
+                    new XAttribute("canonicalShowName", mapping.CanonicalShowName),
+                    new XAttribute("sourceId", mapping.SourceId)
                 ));
             }
 
@@ -121,11 +131,14 @@ namespace Strafe {
         }
     }
 
-    public class CachedShow {
+    /// <summary> Stores a local mapping of a filename substring to a canonical TV show. </summary>
+    public class ShowMapping {
         public enum TVSources { TVMaze }
 
         public string FileShowName, CanonicalShowName;
-        public int TVMazeId;
+        public string SourceId;
         public TVSources TVSource;
+
+        public int TVMazeId => Convert.ToInt32(SourceId);
     }
 }

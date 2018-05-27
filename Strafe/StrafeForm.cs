@@ -11,6 +11,7 @@ namespace Strafe {
     public partial class StrafeForm : Form {
 
         public static Config Config;
+        public static Cache Cache;
 
         private static FileInfo LogFile {
             get {
@@ -35,6 +36,7 @@ namespace Strafe {
 
             Config = new Config();
             Log("Strafe " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " started");
+            Cache = new Cache();
         }
 
         private void Form1_Shown(object sender, EventArgs e) {
@@ -179,12 +181,6 @@ namespace Strafe {
             manuallySelectEpisodeToolStripMenuItem.Enabled = tvFile.Episode != null;
         }
 
-        private void openInExplorerToolStripMenuItem_Click(object sender, EventArgs e) {
-            List<string> filepaths = new List<string>();
-            foreach (DataGridViewRow row in dataGridView1.SelectedRows) filepaths.Add(GetRowTVFile(row).OriginalFile.Directory.FullName);
-            foreach (string filepath in filepaths.Distinct()) System.Diagnostics.Process.Start(filepath);
-        }
-
         private void manuallySelectShowToolStripMenuItem_Click(object sender, EventArgs e) {
             TVFile tvFile = GetSelectedRowTVFile(); // GetRowTVFile(dataGridView1.SelectedRows[0]);
             if (tvFile.Episode == null) return;
@@ -198,7 +194,7 @@ namespace Strafe {
                 if (tvFile.Episode == null) continue;
 
                 // set cache item 
-                Config.SetTVMazeCacheItem(tvFile.Episode.RawShowName, showForm.SelectedShowName, showForm.SelectedShowId);
+                Config.SetTVMazeMapping(tvFile.Episode.RawShowName, showForm.SelectedShowName, showForm.SelectedShowId);
                 tvFile.Episode = null;
                 tvFile.Action = TVFile.Actions.Rename;
                 UpdateDataGridRow(row);
@@ -239,8 +235,17 @@ namespace Strafe {
             }
         }
 
-        private void removeFromListToolStripMenuItem_Click(object sender, EventArgs e) {
-            foreach (DataGridViewRow row in dataGridView1.SelectedRows) dataGridView1.Rows.Remove(row);
+        private void requeryFileToolStripMenuItem_Click(object sender, EventArgs e) {
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows) {
+                TVFile tvFile = GetRowTVFile(row);
+                tvFile.Action = TVFile.Actions.Rename;
+                tvFile.ErrorMessage = "";
+                tvFile.Episode = null;
+                UpdateDataGridRow(row);
+            }
+
+            // start the background process
+            if (!backgroundWorker1.IsBusy) backgroundWorker1.RunWorkerAsync();
         }
 
         private void ignoreToolStripMenuItem1_Click(object sender, EventArgs e) {
@@ -259,6 +264,16 @@ namespace Strafe {
             TVFile tvFile = GetRowTVFile(row);
             tvFile.Action = action;
             UpdateDataGridRow(row);
+        }
+
+        private void openInExplorerToolStripMenuItem_Click(object sender, EventArgs e) {
+            List<string> filepaths = new List<string>();
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows) filepaths.Add(GetRowTVFile(row).OriginalFile.Directory.FullName);
+            foreach (string filepath in filepaths.Distinct()) System.Diagnostics.Process.Start(filepath);
+        }
+
+        private void removeFromListToolStripMenuItem_Click(object sender, EventArgs e) {
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows) dataGridView1.Rows.Remove(row);
         }
 
         #endregion
@@ -341,17 +356,28 @@ namespace Strafe {
             System.Diagnostics.Process.Start(Config.TVShowRootFilepath);
         }
 
-        private void clearShowCacheToolStripMenuItem_Click(object sender, EventArgs e) {
-            if (MessageBox.Show("Remove all locally cached show items?", "Confirm Cache Clear", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK) return;
-
-            Config.CachedShows.Clear();
-            Config.Save();
-        }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
             Application.Exit();
         }
 
+        private void clearShowMappingsToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (MessageBox.Show("Remove all locally mapped shows?", "Confirm Show Mappings Clear", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK) return;
+
+            Config.ShowMappings.Clear();
+            Config.Save();
+        }
+
+        private void clearCacheItemsToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (MessageBox.Show("Remove all cache items?", "Confirm Cache Clear", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK) return;
+
+            Cache.Clear();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
+            About_Box.FormAbout about = new About_Box.FormAbout() { Description = "Strafe helps you organize your TV show video files by querying web services (like TVMaze.com) to determine the canonical show and episode names and moving and renaming your files in a consistent manner." };
+            about.ShowDialog();
+        }
+   
         #endregion
 
         public static void Log(string message) {
@@ -360,12 +386,9 @@ namespace Strafe {
         }
 
         private void StrafeForm_FormClosed(object sender, FormClosedEventArgs e) {
+            Log("Saving cache file");
+            Cache.Save();
             Log("Strafe closing normally");
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
-            About_Box.FormAbout about = new About_Box.FormAbout() { Description = "Strafe helps you organize your TV show video files by querying web services (like TVMaze.com) to determine the canonical show and episode names and moving and renaming your files in a consistent manner." };
-            about.ShowDialog();
         }
     }
 }

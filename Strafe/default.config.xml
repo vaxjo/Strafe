@@ -21,4 +21,9 @@
     questionMark=""
     />
 
+  <Cache
+    enabled="True"
+    expiration="30"
+   />
+
 </Strafe>

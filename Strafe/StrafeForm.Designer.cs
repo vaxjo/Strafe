@@ -50,11 +50,14 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setTVShowRootDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTVShowRootDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearShowCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.requeryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearShowMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearCacheItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStripFile.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -140,12 +143,13 @@
             this.contextMenuStripFile.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.manuallySelectShowToolStripMenuItem,
             this.manuallySelectEpisodeToolStripMenuItem,
+            this.requeryFileToolStripMenuItem,
             this.toolStripSeparator1,
             this.setActionToolStripMenuItem,
             this.openInExplorerToolStripMenuItem,
             this.removeFromListToolStripMenuItem});
             this.contextMenuStripFile.Name = "contextMenuStripFile";
-            this.contextMenuStripFile.Size = new System.Drawing.Size(202, 120);
+            this.contextMenuStripFile.Size = new System.Drawing.Size(202, 142);
             this.contextMenuStripFile.Text = "Action";
             this.contextMenuStripFile.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripFile_Opening);
             // 
@@ -237,6 +241,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.settingsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -249,7 +254,6 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setTVShowRootDirectoryToolStripMenuItem,
             this.openTVShowRootDirectoryToolStripMenuItem,
-            this.clearShowCacheToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -269,13 +273,6 @@
             this.openTVShowRootDirectoryToolStripMenuItem.Text = "&Explore TV Show Root Directory";
             this.openTVShowRootDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openTVShowRootDirectoryToolStripMenuItem_Click);
             // 
-            // clearShowCacheToolStripMenuItem
-            // 
-            this.clearShowCacheToolStripMenuItem.Name = "clearShowCacheToolStripMenuItem";
-            this.clearShowCacheToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
-            this.clearShowCacheToolStripMenuItem.Text = "&Clear Show Cache";
-            this.clearShowCacheToolStripMenuItem.Click += new System.EventHandler(this.clearShowCacheToolStripMenuItem_Click);
-            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -291,6 +288,13 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
             // progressBar1
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -301,12 +305,35 @@
             this.progressBar1.TabIndex = 3;
             this.progressBar1.Visible = false;
             // 
-            // aboutToolStripMenuItem
+            // requeryFileToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.aboutToolStripMenuItem.Text = "&About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.requeryFileToolStripMenuItem.Name = "requeryFileToolStripMenuItem";
+            this.requeryFileToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.requeryFileToolStripMenuItem.Text = "Re&query File";
+            this.requeryFileToolStripMenuItem.Click += new System.EventHandler(this.requeryFileToolStripMenuItem_Click);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearShowMappingsToolStripMenuItem,
+            this.clearCacheItemsToolStripMenuItem});
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "&Settings";
+            // 
+            // clearShowMappingsToolStripMenuItem
+            // 
+            this.clearShowMappingsToolStripMenuItem.Name = "clearShowMappingsToolStripMenuItem";
+            this.clearShowMappingsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.clearShowMappingsToolStripMenuItem.Text = "Clear Show &Mappings";
+            this.clearShowMappingsToolStripMenuItem.Click += new System.EventHandler(this.clearShowMappingsToolStripMenuItem_Click);
+            // 
+            // clearCacheItemsToolStripMenuItem
+            // 
+            this.clearCacheItemsToolStripMenuItem.Name = "clearCacheItemsToolStripMenuItem";
+            this.clearCacheItemsToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.clearCacheItemsToolStripMenuItem.Text = "Clear &Cache Items";
+            this.clearCacheItemsToolStripMenuItem.Click += new System.EventHandler(this.clearCacheItemsToolStripMenuItem_Click);
             // 
             // StrafeForm
             // 
@@ -355,7 +382,6 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.ToolStripMenuItem manuallySelectEpisodeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manuallySelectShowToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem clearShowCacheToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn tvfile;
         private System.Windows.Forms.DataGridViewTextBoxColumn filename;
         private System.Windows.Forms.DataGridViewTextBoxColumn filetype;
@@ -365,6 +391,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn error;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem requeryFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearShowMappingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearCacheItemsToolStripMenuItem;
     }
 }
 

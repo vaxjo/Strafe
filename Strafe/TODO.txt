@@ -1,0 +1,4 @@
+﻿add year "{year}" to fileFormat config param
+
+rebuild config file so it's more robust
+-instead of a default.xml file, put them in the settings resource and override local values with those from the xml

@@ -33,7 +33,8 @@ namespace Strafe {
             RawShowName = RawShowName.Trim();
             StrafeForm.Log("Raw show name: \"" + RawShowName + "\"");
 
-            // TODO: talk to theTVDB's API to get the canonical show name and episode name - https://api.thetvdb.com/swagger
+            /* TODO: whenever TheTVDB starts working and I can log in, provide a switch in Config as to which service to get show info from // https://api.thetvdb.com/swagger
+             * for now, we just use TVMaze (which seems to work really well) */
 
             try {
                 var tvmazeResult = TVMaze.GetShowName(RawShowName);

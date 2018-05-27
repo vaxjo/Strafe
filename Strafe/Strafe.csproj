@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache.cs" />
     <Compile Include="Episode.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="EpisodeSelectionForm.cs">
@@ -143,6 +144,7 @@
   <ItemGroup>
     <Content Include="lib\About Box.dll" />
     <Content Include="Orc.ico" />
+    <Content Include="TODO.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="PostBuildMacros">
