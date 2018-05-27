@@ -26,7 +26,8 @@ namespace Strafe {
             comboBoxShow.Items.Clear();
             try {
                 List<string> shows = TVMaze.GetShowList(textBoxSearch.Text);
-                foreach (string show in shows) comboBoxShow.Items.Add(new ShowSelectionComboItem(show));
+                //foreach (string show in shows) comboBoxShow.Items.Add(new ShowSelectionComboItem(show));
+                foreach (ShowSelectionComboItem option in shows.Select(o => new ShowSelectionComboItem(o)).OrderByDescending(o => o.Year)) comboBoxShow.Items.Add(option);
             } catch { }
 
             if (comboBoxShow.Items.Count == 0) comboBoxShow.Items.Add(new ShowSelectionComboItem("0,,(No Matches)"));
@@ -34,16 +35,15 @@ namespace Strafe {
         }
 
         private void buttonOK_Click(object sender, EventArgs e) {
+            if (comboBoxShow.SelectedItem == null) return;
+
             ShowSelectionComboItem selection = (ShowSelectionComboItem) comboBoxShow.SelectedItem;
+            if (selection.Id == 0) return;
+
             SelectedShowId = selection.Id;
             SelectedShowName = selection.ShowName;
-            Close();
+            DialogResult = DialogResult.OK;
         }
-
-        private void buttonCancel_Click(object sender, EventArgs e) {
-            Close();
-        }
-
     }
 
     public struct ShowSelectionComboItem {
