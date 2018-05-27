@@ -194,7 +194,7 @@ namespace Strafe {
                 if (tvFile.Episode == null) continue;
 
                 // set cache item 
-                Config.SetTVMazeMapping(tvFile.Episode.RawShowName, showForm.SelectedShowName, showForm.SelectedShowId);
+                Config.SetTVMazeMapping(tvFile.Episode.RawShowName, showForm.SelectedShowId);
                 tvFile.Episode = null;
                 tvFile.Action = TVFile.Actions.Rename;
                 UpdateDataGridRow(row);
@@ -333,7 +333,8 @@ namespace Strafe {
 
             // clean up empty directories (deepest ones first)
             Log("Cleaning up empty directories");
-            foreach (DirectoryInfo di in processedDirectories.Distinct().OrderByDescending(o => o.FullName.Length)) {
+            foreach (string directoryName in processedDirectories.Select(o => o.FullName).Distinct().OrderByDescending(o => o.Length)) {
+                DirectoryInfo di = new DirectoryInfo(directoryName);
                 Log("Checking [" + di.FullName + "]");
                 di.Refresh(); // maybe this will clear up some of these random errors
                 if (di.Exists && di.GetDirectories().Count() + di.GetFiles().Count() == 0) {

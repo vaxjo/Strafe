@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace Strafe {
     public class Episode {
         public string RawShowName;
-        public string ShowName, EpisodeName;
+        public string ShowName, Year, EpisodeName;
         public int Season, EpisodeNumber;
         public int TVMazeId;
         public string Error;
@@ -37,9 +37,10 @@ namespace Strafe {
              * for now, we just use TVMaze (which seems to work really well) */
 
             try {
-                var tvmazeResult = TVMaze.GetShowName(RawShowName);
-                TVMazeId = tvmazeResult.Item1;
-                ShowName = tvmazeResult.Item2;
+                TVMaze_Show tvmazeResult = TVMaze.GetShowName(RawShowName);
+                TVMazeId = tvmazeResult.TVMazeId;
+                ShowName = tvmazeResult.ShowName;
+                Year = tvmazeResult.Year;
 
                 if (Season > 0 && EpisodeNumber > 0) EpisodeName = TVMaze.GetEpisodeName(TVMazeId, Season, EpisodeNumber);
 

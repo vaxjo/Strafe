@@ -46,6 +46,7 @@ namespace Strafe {
 
             formattedName = formattedName.Replace("{showName}", StrafeForm.Config.GetFileSafeName(Episode.ShowName));
             formattedName = formattedName.Replace("{episodeName}", StrafeForm.Config.GetFileSafeName(Episode.EpisodeName));
+            formattedName = formattedName.Replace("{year}", Episode.Year);
             formattedName = formattedName.Replace("{s}", Episode.Season.ToString("D1"));
             formattedName = formattedName.Replace("{ss}", Episode.Season.ToString("D2"));
             formattedName = formattedName.Replace("{sss}", Episode.Season.ToString("D3"));

@@ -8,27 +8,29 @@ namespace Strafe {
     public class TVMaze {
 
         /// <summary> Query TV Maze and, ideally, return the show's canonical name and id. </summary>
-        public static Tuple<int, string> GetShowName(string fileShowName) {
+        public static TVMaze_Show GetShowName(string fileShowName) {
+            ShowMapping showMapping = StrafeForm.Config.ShowMappings.FirstOrDefault(o => o.FileShowName.ToLower() == fileShowName.ToLower() && o.TVSource == ShowMapping.TVSources.TVMaze);
+            if (showMapping != null) {
+                CacheItem showCache = StrafeForm.Cache.Get("http://api.tvmaze.com/shows/" + showMapping.TVMazeId);
+                return new TVMaze_Show(showCache.JSONResponse.JSON);
+            }
 
-            ShowMapping cache = StrafeForm.Config.ShowMappings.FirstOrDefault(o => o.FileShowName == fileShowName && o.TVSource == ShowMapping.TVSources.TVMaze);
-            if (cache != null) return new Tuple<int, string>(cache.TVMazeId, cache.CanonicalShowName);
-
-            var result = GetShowName2(fileShowName);
-            StrafeForm.Config.SetTVMazeMapping(fileShowName, result.Item2, result.Item1);
+            TVMaze_Show result = GetShowName2(fileShowName);
+            StrafeForm.Config.SetTVMazeMapping(fileShowName, result.TVMazeId);
             StrafeForm.Config.Save();
 
-            return new Tuple<int, string>(result.Item1, result.Item2);
+            return result;
         }
 
         /// <summary> Try several approaches to find the show. </summary>
-        protected static Tuple<int, string> GetShowName2(string fileShowName) {
+        protected static TVMaze_Show GetShowName2(string fileShowName) {
             // after each failure, lop off the end of the name and try again
             string slowlyReducingFileName = fileShowName.Trim();
             while (slowlyReducingFileName.Length > 0) {
                 CacheItem singlesearchCache = StrafeForm.Cache.Get("http://api.tvmaze.com/singlesearch/shows?q=" + slowlyReducingFileName);
                 JSONResponse singlesearch = singlesearchCache.JSONResponse;
 
-                if (singlesearch.HTTPStatus == HttpStatusCode.OK) return new Tuple<int, string>((int) singlesearch.JSON.id, (string) singlesearch.JSON.name);
+                if (singlesearch.HTTPStatus == HttpStatusCode.OK) return new TVMaze_Show(singlesearch.JSON);
 
                 if (singlesearch.HTTPStatus != HttpStatusCode.NotFound) {
                     StrafeForm.Log("Unknown TVMaze http status: " + singlesearch.HTTPStatus);
@@ -57,7 +59,7 @@ namespace Strafe {
             }
 
             StrafeForm.Log("Couldn't find episode on TVMaze: http://api.tvmaze.com/shows/" + tvMazeId + "/episodes?specials=1");
-            throw new TVMazeException("TVMaze: couldn't find episode");
+            throw new TVMazeException("TVMaze: couldn't find episode in list");
         }
 
         public static List<string> GetEpisodeList(int tvMazeId) {
@@ -95,6 +97,18 @@ namespace Strafe {
                 showNames.Add(id + "," + (string.IsNullOrWhiteSpace(premiered) ? "" : premiered.Substring(0, 4)) + "," + name);
             }
             return showNames;
+        }
+    }
+
+    public class TVMaze_Show {
+        public int TVMazeId;
+        public string ShowName, Year;
+
+        public TVMaze_Show(dynamic showJson) {
+            TVMazeId = showJson.id;
+            ShowName = showJson.name;
+            Year = (string) showJson.premiered; // 1983-05-18
+            Year = (string.IsNullOrWhiteSpace(Year) ? "" : Year.Substring(0, 4));
         }
     }
 

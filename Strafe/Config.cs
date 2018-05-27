@@ -61,16 +61,15 @@ namespace Strafe {
                 ShowMappings.Add(new ShowMapping() {
                     TVSource = (ShowMapping.TVSources) Enum.Parse(typeof(ShowMapping.TVSources), xmlCache.Attribute("source").Value),
                     FileShowName = xmlCache.Attribute("fileShowName").Value,
-                    CanonicalShowName = xmlCache.Attribute("canonicalShowName").Value,
                     SourceId = xmlCache.Attribute("sourceId").Value
                 });
             }
         }
 
         /// <summary> Add or update cached show item. (Does not call Save().) </summary>
-        public void SetTVMazeMapping(string fileShowName, string canonicalShowName, int sourceId) {
-            ShowMappings.RemoveAll(o => o.FileShowName == fileShowName);
-            ShowMappings.Add(new ShowMapping() { CanonicalShowName = canonicalShowName, FileShowName = fileShowName, SourceId = sourceId.ToString(), TVSource = ShowMapping.TVSources.TVMaze });
+        public void SetTVMazeMapping(string fileShowName, int sourceId) {
+            ShowMappings.RemoveAll(o => o.FileShowName.ToLower() == fileShowName.ToLower());
+            ShowMappings.Add(new ShowMapping() { FileShowName = fileShowName.ToLower(), SourceId = sourceId.ToString(), TVSource = ShowMapping.TVSources.TVMaze });
         }
 
         /// <summary> Remove and replace illegal file name characters. </summary>
@@ -124,7 +123,6 @@ namespace Strafe {
                 config.Add(new XElement("ShowMapping",
                     new XAttribute("source", mapping.TVSource),
                     new XAttribute("fileShowName", mapping.FileShowName),
-                    new XAttribute("canonicalShowName", mapping.CanonicalShowName),
                     new XAttribute("sourceId", mapping.SourceId)
                 ));
             }
@@ -137,8 +135,7 @@ namespace Strafe {
     public class ShowMapping {
         public enum TVSources { TVMaze }
 
-        public string FileShowName, CanonicalShowName;
-        public string SourceId;
+        public string FileShowName, SourceId;
         public TVSources TVSource;
 
         public int TVMazeId => Convert.ToInt32(SourceId);

@@ -1,6 +1,12 @@
-﻿add year "{year}" to fileFormat config param
-
-rebuild config file so it's more robust
+﻿rebuild config file so it's more robust
 -instead of a default.xml file, put them in the settings resource and override local values with those from the xml
 
 local readme or help file
+
+select show manual
+-sort by date
+-catch OK on empty combo box
+
+allow to remove items from grid via "delete"
+
+Disk Gently (2012) isn't working - don't think TVMaze has the correct episode data
