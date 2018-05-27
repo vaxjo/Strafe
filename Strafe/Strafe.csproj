@@ -158,11 +158,11 @@
       $(PostBuildEventDependsOn);
       PostBuildMacros;
     </PostBuildEventDependsOn>
-    <PostBuildEvent>SET UtilsDir=\\nabu\Ezida\Utils
+    <PostBuildEvent>if $(ConfigurationName) == Debug EXIT
+
+SET "ILMerge=\\nabu\Ezida\Utils\ILMerge\ILMerge.exe"
 
 md Linked
-
-"%25UtilsDir%25\ILMerge\ILMerge.exe" /wildcards /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" /target:winexe "$(TargetPath)" "$(TargetDir)*.dll" "/out:$(TargetDir)Linked\$(TargetName) @(VersionNumber)$(TargetExt)"
-</PostBuildEvent>
+%25ILMerge%25 /wildcards /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" /target:winexe "$(TargetPath)" "$(TargetDir)*.dll" "/out:$(TargetDir)Linked\$(TargetName) @(VersionNumber)$(TargetExt)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
