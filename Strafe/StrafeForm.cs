@@ -319,7 +319,7 @@ namespace Strafe {
                             }
                             if (!newFile.Exists) {
                                 if (tvFile.Action == TVFile.Actions.Move) tvFile.OriginalFile.MoveTo(newFile.FullName);
-                                else if (tvFile.Action == TVFile.Actions.Copy) tvFile.OriginalFile.CopyTo(newFile.FullName); // this hangs with large files - maybe implement this some day: https://stackoverflow.com/a/27179497/3140552
+                                else if (tvFile.Action == TVFile.Actions.Copy) tvFile.OriginalFile.CopyTo(newFile.FullName); // this hangs with large files - maybe implement this some day: https://stackoverflow.com/a/27179497/3140552 or this https://www.pinvoke.net/default.aspx/kernel32.CopyFileEx
                             } else {
                                 anyTrouble = true;
                                 tvFile.Action = TVFile.Actions.Ignore;
