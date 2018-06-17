@@ -165,6 +165,7 @@
 
 SET "ILMerge=\\nabu\Ezida\Utils\ILMerge\ILMerge.exe"
 
+rd /S /Q Public
 md Public
 %25ILMerge%25 /wildcards /targetplatform:v4,"C:\Windows\Microsoft.NET\Framework\v4.0.30319" /target:winexe "$(TargetPath)" "$(TargetDir)*.dll" "/out:$(TargetDir)Public\$(TargetName) @(VersionNumber)$(TargetExt)"
 

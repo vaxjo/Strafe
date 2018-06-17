@@ -291,7 +291,7 @@ namespace Strafe {
             List<DirectoryInfo> processedDirectories = new List<DirectoryInfo>();
 
             int n = progressBar1.Value = 1;
-            progressBar1.Maximum = dataGridView1.Rows.Count;
+            progressBar1.Maximum = dataGridView1.Rows.Count + 1;
             progressBar1.Visible = true;
             foreach (DataGridViewRow row in dataGridView1.Rows) {
                 TVFile tvFile = GetRowTVFile(row);
