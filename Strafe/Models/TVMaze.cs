@@ -38,7 +38,7 @@ namespace Strafe {
                 }
 
                 int lastSpace = slowlyReducingFileName.LastIndexOf(' ');
-                slowlyReducingFileName = slowlyReducingFileName.Substring(0, lastSpace).Trim();
+                slowlyReducingFileName = lastSpace >= 0 ? slowlyReducingFileName.Substring(0, lastSpace).Trim() : "";
             }
 
             StrafeForm.Log("Couldn't find show on TVMaze: http://api.tvmaze.com/singlesearch/shows?q=" + fileShowName);

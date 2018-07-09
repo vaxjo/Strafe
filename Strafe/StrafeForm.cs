@@ -405,6 +405,10 @@ namespace Strafe {
             Cache.Clear();
         }
 
+        private void onlineToolStripMenuItem_Click(object sender, EventArgs e) {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("http://jarrin.net/Strafe"));
+        }
+
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e) {
             About_Box.FormAbout about = new About_Box.FormAbout() { Description = "Strafe helps you organize your TV show video files by querying web services (like TVMaze.com) to determine the canonical show and episode names and moving and renaming your files in a consistent manner." };
             about.ShowDialog();
