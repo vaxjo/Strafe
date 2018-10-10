@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Strafe {
@@ -15,7 +16,9 @@ namespace Strafe {
 
             // get list of episodes and display in combo box
             try {
-                foreach (string episodeResult in TVMaze.GetEpisodeList(tvFile.Episode.TVMazeId)) {
+                List<string> episodeList = TVMaze.GetEpisodeList(tvFile.Episode.TVMazeId);
+                episodeList.Reverse(); // let's make the last one first
+                foreach (string episodeResult in episodeList) {
                     comboBoxEpisodes.Items.Add(new EpisodeSelectionComboItem(episodeResult));
                 }
             } catch (TVMazeException tvExc) {

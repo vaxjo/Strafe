@@ -28,7 +28,7 @@ namespace Strafe {
             if (!CacheFile.Exists) return;
 
             CacheItems = (List<CacheItem>) JsonConvert.DeserializeObject<List<CacheItem>>(File.ReadAllText(CacheFile.FullName));
-            CacheItems.RemoveAll(o => DateTime.Now.Subtract(o.LastUsed).TotalDays > StrafeForm.Config.CacheExpiration); // don't anything that's expired
+            CacheItems.RemoveAll(o => DateTime.Now.Subtract(o.LastUsed).TotalDays > StrafeForm.Config.CacheExpiration); // remove everything that's expired
             StrafeForm.Log("Cache loaded, " + CacheItems.Count + " items");
         }
 
@@ -79,6 +79,10 @@ namespace Strafe {
             Url = url;
             LastUsed = DateTime.Now;
             JSONResponse = JSONResponse.Get(url);
+        }
+
+        public override string ToString() {
+            return Url + " - " + LastUsed;
         }
     }
 }

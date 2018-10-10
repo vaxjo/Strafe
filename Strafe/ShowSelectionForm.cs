@@ -54,7 +54,7 @@ namespace Strafe {
         public ShowSelectionComboItem(string show) {
             Id = Convert.ToInt32(show.Split(',')[0]);
             Year = string.IsNullOrWhiteSpace(show.Split(',')[1]) ? (int?) null : Convert.ToInt32(show.Split(',')[1]);
-            ShowName = show.Split(',')[2];
+            ShowName = show.Split(new char[] { ',' }, 3)[2];
         }
 
         public override string ToString() {
