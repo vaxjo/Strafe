@@ -51,7 +51,7 @@ namespace Strafe {
 
         /// <summary> Extract the season/episode number and return the matched substring. </summary>
         protected string ExtractSE(string filename) {
-            Match match = Regex.Match(filename, @"s(\d+)E(\d+)", RegexOptions.IgnoreCase); // try for s00e00
+            Match match = Regex.Match(filename, @"s(\d+).*e(\d+)", RegexOptions.IgnoreCase); // try for s00e00 or s00-e00
             if (match.Success) {
                 Season = Convert.ToInt32(match.Groups[1].Value);
                 EpisodeNumber = Convert.ToInt32(match.Groups[2].Value);
