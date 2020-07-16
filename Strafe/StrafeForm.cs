@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,7 +8,6 @@ using System.Windows.Forms;
 
 namespace Strafe {
     public partial class StrafeForm : Form {
-
         public static Config Config;
         public static Cache Cache;
 
@@ -27,6 +25,10 @@ namespace Strafe {
         }
 
         private void Form1_Load(object sender, EventArgs e) {
+            Config = new Config();
+            Log("Strafe " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " starting");
+
+            Log("Setting up backgroundWorker");
             backgroundWorker1 = new BackgroundWorker();
             backgroundWorker1.DoWork += BackgroundWorker1_DoWork;
             backgroundWorker1.ProgressChanged += BackgroundWorker1_ProgressChanged;
@@ -34,8 +36,7 @@ namespace Strafe {
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
 
-            Config = new Config();
-            Log("Strafe " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString() + " started");
+            Log("Getting Cache");
             Cache = new Cache();
         }
 
@@ -55,7 +56,7 @@ namespace Strafe {
 
         private void dataGridView1_DragDrop(object sender, DragEventArgs e) {
             buttonProcess.Enabled = false;
-            foreach (string s in (string[]) e.Data.GetData(DataFormats.FileDrop, false)) AddFileSystemObject(s);
+            foreach (string s in (string[])e.Data.GetData(DataFormats.FileDrop, false)) AddFileSystemObject(s);
             progressBar1.Visible = true;
             if (!backgroundWorker1.IsBusy) backgroundWorker1.RunWorkerAsync();
         }
@@ -146,14 +147,14 @@ namespace Strafe {
 
         /// <summary> Get the TVFile associated with the currently clicked grid row. </summary>
         private TVFile GetSelectedRowTVFile() {
-            int rowIndex = (int) contextMenuStripFile.Tag;
+            int rowIndex = (int)contextMenuStripFile.Tag;
             return GetRowTVFile(dataGridView1.Rows[rowIndex]);
         }
 
         /// <summary> Get the TVFile associated with the specified row. </summary>
         private TVFile GetRowTVFile(DataGridViewRow row) {
             // return TVFiles.FirstOrDefault(o => o.Id == (Guid) row.Cells["id"].Value);
-            return (TVFile) row.Cells["tvfile"].Value;
+            return (TVFile)row.Cells["tvfile"].Value;
         }
 
         #region Context Menu Items
@@ -165,9 +166,9 @@ namespace Strafe {
 
         private void contextMenuStripFile_Opening(object sender, CancelEventArgs e) {
             // Tag should contain the current RowIndex
-            if (contextMenuStripFile.Tag == null || (int) contextMenuStripFile.Tag < 0) e.Cancel = true;
+            if (contextMenuStripFile.Tag == null || (int)contextMenuStripFile.Tag < 0) e.Cancel = true;
 
-            int rowIndex = (int) contextMenuStripFile.Tag;
+            int rowIndex = (int)contextMenuStripFile.Tag;
             DataGridViewRow row = dataGridView1.Rows[rowIndex];
 
             // if the current item is not selected, select it now
