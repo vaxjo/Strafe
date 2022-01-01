@@ -163,7 +163,7 @@
     </PostBuildEventDependsOn>
     <PostBuildEvent>if $(ConfigurationName) == Debug EXIT
 
-SET "ILMerge=\\nabu\Ezida\Utils\ILMerge\ILMerge.exe"
+SET "ILMerge=n:\Ezida\Utils\ILMerge\ILMerge.exe"
 
 rd /S /Q Public
 md Public
