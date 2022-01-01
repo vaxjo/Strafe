@@ -92,7 +92,12 @@ namespace Strafe {
             row.Cells["action"].Value = tvFile.Action;
             row.Cells["error"].Value = tvFile.ErrorMessage;
             row.Cells["show"].Value = tvFile.Episode != null ? tvFile.Episode.ShowName : "";
-            row.Cells["episode"].Value = tvFile.Episode != null ? tvFile.Episode.EpisodeName : "";
+            
+            if (tvFile.Episode != null) {
+                row.Cells["season"].Value = tvFile.Episode.Season;
+                row.Cells["episode"].Value = tvFile.Episode.EpisodeNumber;
+                row.Cells["title"].Value = tvFile.Episode.EpisodeName;
+            }
         }
 
         #region Background Worker for doing API stuff

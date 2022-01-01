@@ -26,13 +26,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StrafeForm));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.tvfile = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.filename = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.filetype = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.show = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.episode = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.action = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.error = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripFile = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.manuallySelectShowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manuallySelectEpisodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,9 +50,18 @@
             this.clearShowMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearCacheItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.onlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.onlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tvfile = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.filename = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.filetype = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.show = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.season = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.episode = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.action = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.error = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStripFile.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -80,7 +82,9 @@
             this.filename,
             this.filetype,
             this.show,
+            this.season,
             this.episode,
+            this.title,
             this.action,
             this.error});
             this.dataGridView1.ContextMenuStrip = this.contextMenuStripFile;
@@ -97,50 +101,6 @@
             this.dataGridView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragDrop);
             this.dataGridView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.dataGridView1_DragEnter);
             this.dataGridView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyUp);
-            // 
-            // tvfile
-            // 
-            this.tvfile.HeaderText = "TV File";
-            this.tvfile.Name = "tvfile";
-            this.tvfile.ReadOnly = true;
-            this.tvfile.Visible = false;
-            // 
-            // filename
-            // 
-            this.filename.HeaderText = "File Name";
-            this.filename.Name = "filename";
-            this.filename.ReadOnly = true;
-            // 
-            // filetype
-            // 
-            this.filetype.HeaderText = "Type";
-            this.filetype.Name = "filetype";
-            this.filetype.ReadOnly = true;
-            // 
-            // show
-            // 
-            this.show.HeaderText = "Show";
-            this.show.Name = "show";
-            this.show.ReadOnly = true;
-            // 
-            // episode
-            // 
-            this.episode.HeaderText = "Episode";
-            this.episode.Name = "episode";
-            this.episode.ReadOnly = true;
-            // 
-            // action
-            // 
-            this.action.HeaderText = "Action";
-            this.action.Name = "action";
-            this.action.ReadOnly = true;
-            this.action.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // error
-            // 
-            this.error.HeaderText = "Error";
-            this.error.Name = "error";
-            this.error.ReadOnly = true;
             // 
             // contextMenuStripFile
             // 
@@ -331,10 +291,17 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
             // 
+            // onlineToolStripMenuItem
+            // 
+            this.onlineToolStripMenuItem.Name = "onlineToolStripMenuItem";
+            this.onlineToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.onlineToolStripMenuItem.Text = "&Online";
+            this.onlineToolStripMenuItem.Click += new System.EventHandler(this.onlineToolStripMenuItem_Click);
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -348,12 +315,71 @@
             this.progressBar1.TabIndex = 3;
             this.progressBar1.Visible = false;
             // 
-            // onlineToolStripMenuItem
+            // tvfile
             // 
-            this.onlineToolStripMenuItem.Name = "onlineToolStripMenuItem";
-            this.onlineToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.onlineToolStripMenuItem.Text = "&Online";
-            this.onlineToolStripMenuItem.Click += new System.EventHandler(this.onlineToolStripMenuItem_Click);
+            this.tvfile.HeaderText = "TV File";
+            this.tvfile.Name = "tvfile";
+            this.tvfile.ReadOnly = true;
+            this.tvfile.Visible = false;
+            // 
+            // filename
+            // 
+            this.filename.FillWeight = 92.85278F;
+            this.filename.HeaderText = "File Name";
+            this.filename.Name = "filename";
+            this.filename.ReadOnly = true;
+            // 
+            // filetype
+            // 
+            this.filetype.FillWeight = 92.85278F;
+            this.filetype.HeaderText = "Type";
+            this.filetype.Name = "filetype";
+            this.filetype.ReadOnly = true;
+            // 
+            // show
+            // 
+            this.show.FillWeight = 92.85278F;
+            this.show.HeaderText = "Show";
+            this.show.Name = "show";
+            this.show.ReadOnly = true;
+            // 
+            // season
+            // 
+            this.season.FillWeight = 30F;
+            this.season.HeaderText = "S";
+            this.season.Name = "season";
+            this.season.ReadOnly = true;
+            this.season.ToolTipText = "Season Number";
+            // 
+            // episode
+            // 
+            this.episode.FillWeight = 30F;
+            this.episode.HeaderText = "E";
+            this.episode.Name = "episode";
+            this.episode.ReadOnly = true;
+            this.episode.ToolTipText = "Episode Number";
+            // 
+            // title
+            // 
+            this.title.FillWeight = 92.85278F;
+            this.title.HeaderText = "Title";
+            this.title.Name = "title";
+            this.title.ReadOnly = true;
+            // 
+            // action
+            // 
+            this.action.FillWeight = 92.85278F;
+            this.action.HeaderText = "Action";
+            this.action.Name = "action";
+            this.action.ReadOnly = true;
+            this.action.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // error
+            // 
+            this.error.FillWeight = 92.85278F;
+            this.error.HeaderText = "Error";
+            this.error.Name = "error";
+            this.error.ReadOnly = true;
             // 
             // StrafeForm
             // 
@@ -402,13 +428,6 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.ToolStripMenuItem manuallySelectEpisodeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manuallySelectShowToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tvfile;
-        private System.Windows.Forms.DataGridViewTextBoxColumn filename;
-        private System.Windows.Forms.DataGridViewTextBoxColumn filetype;
-        private System.Windows.Forms.DataGridViewTextBoxColumn show;
-        private System.Windows.Forms.DataGridViewTextBoxColumn episode;
-        private System.Windows.Forms.DataGridViewTextBoxColumn action;
-        private System.Windows.Forms.DataGridViewTextBoxColumn error;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem requeryFileToolStripMenuItem;
@@ -417,6 +436,15 @@
         private System.Windows.Forms.ToolStripMenuItem clearCacheItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem onlineToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tvfile;
+        private System.Windows.Forms.DataGridViewTextBoxColumn filename;
+        private System.Windows.Forms.DataGridViewTextBoxColumn filetype;
+        private System.Windows.Forms.DataGridViewTextBoxColumn show;
+        private System.Windows.Forms.DataGridViewTextBoxColumn season;
+        private System.Windows.Forms.DataGridViewTextBoxColumn episode;
+        private System.Windows.Forms.DataGridViewTextBoxColumn title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn action;
+        private System.Windows.Forms.DataGridViewTextBoxColumn error;
     }
 }
 
