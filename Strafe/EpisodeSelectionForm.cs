@@ -29,9 +29,10 @@ namespace Strafe {
             comboBoxEpisodes.SelectedItem = comboBoxEpisodes.Items[0];
 
             if (!string.IsNullOrWhiteSpace(previouslySelectedEpisodeName)) {
-                for (int i = 0; i < comboBoxEpisodes.Items.Count - 1; i++) {
-                    if (((EpisodeSelectionComboItem) comboBoxEpisodes.Items[i]).EpisodeName == previouslySelectedEpisodeName) {
-                        comboBoxEpisodes.SelectedItem = comboBoxEpisodes.Items[i + 1];
+                for (int i = 0; i < comboBoxEpisodes.Items.Count; i++) {
+                    var esci = (EpisodeSelectionComboItem)comboBoxEpisodes.Items[i];
+                    if (esci.EpisodeName == previouslySelectedEpisodeName) {
+                        comboBoxEpisodes.SelectedItem = comboBoxEpisodes.Items[i - 1];
                         break;
                     }
                 }
